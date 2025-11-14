@@ -1,1 +1,3 @@
-Dit is onze project repository 
+ParkSense is een slimme en duurzame oplossing voor het vinden van parkeerplaatsen in steden zoals Den Haag. De meeste mensen rijden 's avonds onnodig rond op zoek naar een parkeerplaats, wat resulteert in frustratie, tijdverlies en extra uitstoot. ParkSense lost dit probleem op met sensoren die automatisch detecteren of een parkeervak bezet of vrij is. Aan het begin van de straat toont een helder verkeerslicht (groen/rood) meteen of er nog parkeerruimtes vrij zijn.
+
+Met ParkSense verminderen we zoekverkeer, luchtvervuiling en stress bij automobilisten. Het systeem is voordelig, uitbreidbaar, en gemakkelijk te implementeren en biedt ondersteuning aan gemeenten met actuele parkeerformatie. ParkSense levert zo een bijdrage aan SDG 11 - Duurzame steden en gemeenschappen.
