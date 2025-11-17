@@ -3,13 +3,21 @@ import java.awt.*;
 
 public class LoginUI extends JFrame {
 
+    // Correct login credentials
+    private final String CORRECT_EMAIL = "admin@example.com";
+    private final String CORRECT_PASSWORD = "12345";
+
+    // UI components
+    private RoundedTextField emailField;
+    private RoundedPasswordField passwordField;
+
     public LoginUI() {
         setTitle("parksence - Login");
         setSize(420, 720);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
 
-        // Gradient panel
+        // Gradient background panel
         JPanel gradientPanel = new JPanel() {
             @Override
             protected void paintComponent(Graphics g) {
@@ -23,6 +31,7 @@ public class LoginUI extends JFrame {
                 g2.fillRect(0, 0, getWidth(), getHeight());
             }
         };
+
         gradientPanel.setLayout(new BoxLayout(gradientPanel, BoxLayout.Y_AXIS));
         gradientPanel.setBorder(BorderFactory.createEmptyBorder(40, 30, 40, 30));
 
@@ -31,8 +40,8 @@ public class LoginUI extends JFrame {
         title.setFont(new Font("Arial", Font.BOLD, 38));
         title.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        // Image
-        ImageIcon icon = new ImageIcon("parking.jpg"); // replace path
+        // Image placeholder (change this to your image file)
+        ImageIcon icon = new ImageIcon("parking.jpg");
         Image scaled = icon.getImage().getScaledInstance(250, 150, Image.SCALE_SMOOTH);
         JLabel imgLabel = new JLabel(new ImageIcon(scaled));
         imgLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -43,25 +52,25 @@ public class LoginUI extends JFrame {
         welcome.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         // Email field
-        RoundedTextField emailField = new RoundedTextField("example@gmail.com");
-        emailField.setPreferredSize(new Dimension(270, 40));
+        emailField = new RoundedTextField("example@gmail.com");
+        emailField.setMaximumSize(new Dimension(270, 40));
 
         // Password field
-        RoundedPasswordField passwordField = new RoundedPasswordField("password");
-        passwordField.setPreferredSize(new Dimension(270, 40));
+        passwordField = new RoundedPasswordField("password");
+        passwordField.setMaximumSize(new Dimension(270, 40));
 
-        // Remember + forgot
+        // Remember + forgot row
         JPanel optionRow = new JPanel(new BorderLayout());
         optionRow.setOpaque(false);
-        JCheckBox remember = new JCheckBox("Remember password");
-        remember.setOpaque(false);
 
-        JLabel forgot = new JLabel("Forgot password?");
-        forgot.setFont(new Font("Arial", Font.PLAIN, 12));
-        forgot.setForeground(Color.BLACK);
+        JCheckBox rememberCB = new JCheckBox("Remember password");
+        rememberCB.setOpaque(false);
 
-        optionRow.add(remember, BorderLayout.WEST);
-        optionRow.add(forgot, BorderLayout.EAST);
+        JLabel forgotLabel = new JLabel("Forgot password?");
+        forgotLabel.setFont(new Font("Arial", Font.PLAIN, 12));
+
+        optionRow.add(rememberCB, BorderLayout.WEST);
+        optionRow.add(forgotLabel, BorderLayout.EAST);
 
         // Login button
         JButton loginBtn = new JButton("LOG IN");
@@ -72,7 +81,7 @@ public class LoginUI extends JFrame {
         loginBtn.setBorder(BorderFactory.createLineBorder(Color.BLACK));
         loginBtn.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        // Sign-up panel
+        // Sign-up section
         JPanel signupPanel = new JPanel();
         signupPanel.setLayout(new BoxLayout(signupPanel, BoxLayout.Y_AXIS));
         signupPanel.setBackground(Color.BLACK);
@@ -81,29 +90,50 @@ public class LoginUI extends JFrame {
 
         JLabel noAcc = new JLabel("No account?");
         noAcc.setForeground(Color.WHITE);
-        JLabel signup = new JLabel("Sign up now");
-        signup.setForeground(Color.WHITE);
+
+        JLabel signupLabel = new JLabel("Sign up now");
+        signupLabel.setForeground(Color.WHITE);
 
         signupPanel.add(noAcc);
-        signupPanel.add(signup);
+        signupPanel.add(signupLabel);
 
-        // Add components to gradient panel
+        // ADD ALL COMPONENTS
         gradientPanel.add(title);
         gradientPanel.add(Box.createVerticalStrut(20));
         gradientPanel.add(imgLabel);
         gradientPanel.add(Box.createVerticalStrut(20));
         gradientPanel.add(welcome);
-        gradientPanel.add(Box.createVerticalStrut(20));
+        gradientPanel.add(Box.createVerticalStrut(25));
         gradientPanel.add(emailField);
         gradientPanel.add(Box.createVerticalStrut(15));
         gradientPanel.add(passwordField);
         gradientPanel.add(Box.createVerticalStrut(10));
         gradientPanel.add(optionRow);
-        gradientPanel.add(Box.createVerticalStrut(20));
-        gradientPanel.add(loginBtn);
         gradientPanel.add(Box.createVerticalStrut(25));
+        gradientPanel.add(loginBtn);
+        gradientPanel.add(Box.createVerticalStrut(30));
         gradientPanel.add(signupPanel);
 
         add(gradientPanel);
+
+        // ✔ LOGIN BUTTON FUNCTIONALITY
+        loginBtn.addActionListener(e -> {
+            String email = emailField.getText();
+            String password = new String(passwordField.getPassword());
+
+            if (email.equals(CORRECT_EMAIL) && password.equals(CORRECT_PASSWORD)) {
+
+                new DashboardUI().setVisible(true); // open next UI
+                dispose(); // close login window
+
+            } else {
+                JOptionPane.showMessageDialog(
+                        this,
+                        "Incorrect email or password",
+                        "Login Failed",
+                        JOptionPane.ERROR_MESSAGE
+                );
+            }
+        });
     }
 }
