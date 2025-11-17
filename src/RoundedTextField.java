@@ -1,12 +1,10 @@
 import javax.swing.*;
 import java.awt.*;
 
-/**
- * Rounded dark text field with white text + hint (placeholder) support.
- */
+
 public class RoundedTextField extends JTextField {
 
-    private String hint = "";   // placeholder text
+    private String hint = "";
 
     public RoundedTextField(String text) {
         super(text);
@@ -17,7 +15,7 @@ public class RoundedTextField extends JTextField {
         setFont(getFont().deriveFont(14f));
     }
 
-    /** Allows LoginPanel to call setHint("text") */
+
     public void setHint(String hint) {
         this.hint = hint;
         repaint();
@@ -25,7 +23,7 @@ public class RoundedTextField extends JTextField {
 
     @Override
     protected void paintComponent(Graphics g) {
-        // Paint rounded background
+
         Graphics2D g2 = (Graphics2D) g.create();
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
@@ -35,7 +33,6 @@ public class RoundedTextField extends JTextField {
         g2.dispose();
         super.paintComponent(g);
 
-        // Draw hint if no text entered
         if (getText().isEmpty() && hint != null && !hint.isEmpty()) {
             Graphics2D g2d = (Graphics2D) g.create();
             g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
@@ -48,6 +45,5 @@ public class RoundedTextField extends JTextField {
 
     @Override
     protected void paintBorder(Graphics g) {
-        // No visible border (matches your design)
     }
 }

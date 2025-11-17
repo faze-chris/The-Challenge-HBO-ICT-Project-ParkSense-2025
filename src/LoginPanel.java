@@ -7,7 +7,7 @@ public class LoginPanel extends JPanel {
     private RoundedTextField emailField;
     private RoundedPasswordField passwordField;
 
-    // Credentials - change as needed
+
     private final String CORRECT_EMAIL = "admin@example.com";
     private final String CORRECT_PASSWORD = "12345";
 
@@ -25,7 +25,7 @@ public class LoginPanel extends JPanel {
         title.setFont(new Font("Arial", Font.BOLD, 36));
         title.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        // Image placeholder: optional - change filename
+
         ImageIcon icon = new ImageIcon("logo.png");
         JLabel imgLabel;
         if (icon.getIconWidth() > 0) {
@@ -70,7 +70,7 @@ public class LoginPanel extends JPanel {
         loginBtn.setForeground(Color.WHITE);
         loginBtn.setFocusPainted(false);
 
-        // Sign up area (visual)
+
         JPanel signupPanel = new JPanel();
         signupPanel.setBackground(Color.BLACK);
         signupPanel.setMaximumSize(new Dimension(160, 60));
@@ -105,19 +105,19 @@ public class LoginPanel extends JPanel {
 
         add(content, BorderLayout.CENTER);
 
-        // Message area at bottom
+
         JLabel help = new JLabel(" ");
         help.setHorizontalAlignment(SwingConstants.CENTER);
         help.setBorder(BorderFactory.createEmptyBorder(8,0,8,0));
         add(help, BorderLayout.SOUTH);
 
-        // Login action
+
         loginBtn.addActionListener(e -> {
             String email = emailField.getText().trim();
             String pass = new String(passwordField.getPassword());
 
             if (email.equals(CORRECT_EMAIL) && pass.equals(CORRECT_PASSWORD)) {
-                // go to dashboard
+
                 manager.showScreen(ScreenManager.DASHBOARD);
             } else {
                 JOptionPane.showMessageDialog(this, "Incorrect email or password",

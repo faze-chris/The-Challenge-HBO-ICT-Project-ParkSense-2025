@@ -14,7 +14,7 @@ public class DashboardPanel extends JPanel {
         setLayout(new BorderLayout());
         setBackground(Color.WHITE);
 
-        // HEADER (rounded yellow)
+
         JPanel headerWrap = new JPanel();
         headerWrap.setOpaque(false);
         headerWrap.setLayout(new BoxLayout(headerWrap, BoxLayout.Y_AXIS));
@@ -40,7 +40,7 @@ public class DashboardPanel extends JPanel {
         header.add(title);
         headerWrap.add(header);
 
-        // SEARCH
+
         JPanel searchWrap = new JPanel();
         searchWrap.setBackground(Color.WHITE);
         searchWrap.setBorder(BorderFactory.createEmptyBorder(12, 18, 12, 18));
@@ -66,7 +66,7 @@ public class DashboardPanel extends JPanel {
         roundedSearch.add(new JLabel("🎤"), BorderLayout.EAST);
         searchWrap.add(roundedSearch);
 
-        // CARDS area
+
         JPanel cards = new JPanel();
         cards.setLayout(new BoxLayout(cards, BoxLayout.Y_AXIS));
         cards.setOpaque(false);
@@ -80,7 +80,7 @@ public class DashboardPanel extends JPanel {
         cards.add(createLocationCard("Gedempte gracht", "gedempte.jpg", ScreenManager.GEDEMPTE));
         cards.add(Box.createVerticalStrut(12));
 
-        // Put header, search, cards in a vertical panel with scroll
+
         JPanel center = new JPanel();
         center.setLayout(new BoxLayout(center, BoxLayout.Y_AXIS));
         center.setOpaque(false);
@@ -96,7 +96,7 @@ public class DashboardPanel extends JPanel {
 
         add(scroll, BorderLayout.CENTER);
 
-        // Bottom nav
+
         JPanel bottomNav = new JPanel(new GridLayout(1, 3));
         bottomNav.setPreferredSize(new Dimension(400, 70));
         bottomNav.setBorder(BorderFactory.createMatteBorder(1,0,0,0, new Color(220,220,220)));
@@ -111,7 +111,7 @@ public class DashboardPanel extends JPanel {
         add(bottomNav, BorderLayout.SOUTH);
     }
 
-    // Create a clickable rounded image card with hover effect
+
     private JPanel createLocationCard(String titleText, String imagePath, String destination) {
         JPanel wrapper = new JPanel();
         wrapper.setOpaque(false);
@@ -125,7 +125,7 @@ public class DashboardPanel extends JPanel {
         if (icon.getIconWidth() > 0) {
             img = icon.getImage().getScaledInstance(380, 140, Image.SCALE_SMOOTH);
         } else {
-            // fallback: plain color
+
             BufferedImagePlaceholder placeholder = new BufferedImagePlaceholder(380,140);
             img = placeholder.getImage();
         }
@@ -133,7 +133,7 @@ public class DashboardPanel extends JPanel {
         JLabel imageLabel = new JLabel(new ImageIcon(img)) {
             @Override
             protected void paintComponent(Graphics g) {
-                // clip to rounded rectangle then draw image
+
                 Graphics2D g2 = (Graphics2D) g.create();
                 g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
                 Shape clip = new java.awt.geom.RoundRectangle2D.Float(0, 0, getWidth(), getHeight(), 28, 28);
@@ -150,12 +150,12 @@ public class DashboardPanel extends JPanel {
         label.setBorder(BorderFactory.createEmptyBorder(8, 12, 8, 12));
         imageLabel.add(label, BorderLayout.SOUTH);
 
-        // overlay panel to capture hover & clicks
+
         JPanel overlay = new JPanel(new BorderLayout());
         overlay.setOpaque(false);
         overlay.add(imageLabel, BorderLayout.CENTER);
 
-        // mouse hover effects: shadow border + hand cursor
+
         overlay.addMouseListener(new MouseAdapter() {
             Color shadow = new Color(0, 0, 0, 60);
             @Override
@@ -177,7 +177,6 @@ public class DashboardPanel extends JPanel {
 
             @Override
             public void mouseClicked(MouseEvent e) {
-                // navigate to detail screen
                 manager.showScreen(destination);
             }
         });
@@ -205,7 +204,7 @@ public class DashboardPanel extends JPanel {
         return p;
     }
 
-    // small helper that creates a fallback placeholder image
+
     private static class BufferedImagePlaceholder {
         private final Image image;
         public BufferedImagePlaceholder(int w, int h) {

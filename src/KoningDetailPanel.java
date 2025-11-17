@@ -1,5 +1,5 @@
 import javax.swing.*;
-import java.awt.*;        // <-- required
+import java.awt.*;
 
 public class KoningDetailPanel extends JPanel {
     public KoningDetailPanel(ScreenManager manager) {

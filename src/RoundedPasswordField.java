@@ -1,9 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
 
-/**
- * Rounded dark password field with white text + hint support.
- */
+
 public class RoundedPasswordField extends JPasswordField {
 
     private String hint = "";
@@ -17,7 +15,7 @@ public class RoundedPasswordField extends JPasswordField {
         setFont(getFont().deriveFont(14f));
     }
 
-    /** Allows LoginPanel to call setHint("text") */
+
     public void setHint(String hint) {
         this.hint = hint;
         repaint();
@@ -25,7 +23,7 @@ public class RoundedPasswordField extends JPasswordField {
 
     @Override
     protected void paintComponent(Graphics g) {
-        // Rounded background
+
         Graphics2D g2 = (Graphics2D) g.create();
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
@@ -35,7 +33,7 @@ public class RoundedPasswordField extends JPasswordField {
         g2.dispose();
         super.paintComponent(g);
 
-        // Draw hint if password is empty
+
         if (getPassword().length == 0 && hint != null && !hint.isEmpty()) {
             Graphics2D g2d = (Graphics2D) g.create();
             g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
@@ -48,6 +46,6 @@ public class RoundedPasswordField extends JPasswordField {
 
     @Override
     protected void paintBorder(Graphics g) {
-        // No visible border
+
     }
 }

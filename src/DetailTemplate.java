@@ -1,16 +1,13 @@
 import javax.swing.*;
 import java.awt.*;
 
-/**
- * Reusable detail-layout template with header, pill buttons, big icon bar,
- * information box and a Java2D donut chart. Integrates with ScreenManager.
- */
+
 public class DetailTemplate extends JPanel {
 
     private ScreenManager manager;
     private String title;
-    private int occupied; // number of occupied spots
-    private int free;     // number of free spots
+    private int occupied;
+    private int free;
 
     public DetailTemplate(ScreenManager manager, String title, int occupied, int free) {
         this.manager = manager;
@@ -19,9 +16,9 @@ public class DetailTemplate extends JPanel {
         this.free = free;
 
         setLayout(new BorderLayout());
-        setBackground(new Color(208, 255, 242)); // soft aqua body background
+        setBackground(new Color(208, 255, 242));
 
-        // Top area (title with rounded lime header)
+
         JPanel topBox = new JPanel() {
             @Override
             protected void paintComponent(Graphics g) {
@@ -41,13 +38,13 @@ public class DetailTemplate extends JPanel {
         topBox.add(titleLabel);
         add(topBox, BorderLayout.NORTH);
 
-        // Center content panel (vertical)
+
         JPanel center = new JPanel();
         center.setOpaque(false);
         center.setLayout(new BoxLayout(center, BoxLayout.Y_AXIS));
         center.setBorder(BorderFactory.createEmptyBorder(12, 12, 12, 12));
 
-        // Pill buttons row
+
         JPanel pills = new JPanel();
         pills.setOpaque(false);
         pills.setLayout(new FlowLayout(FlowLayout.LEFT, 10, 6));
@@ -66,7 +63,7 @@ public class DetailTemplate extends JPanel {
         center.add(pills);
         center.add(Box.createVerticalStrut(8));
 
-        // Big red icon bar (icons represented by labels / placeholders)
+
         JPanel bigBar = new JPanel();
         bigBar.setOpaque(false);
         bigBar.setLayout(new BorderLayout());
@@ -97,7 +94,7 @@ public class DetailTemplate extends JPanel {
         center.add(bigBar);
         center.add(Box.createVerticalStrut(12));
 
-        // Information box ("meldingen" + average occupancy)
+
         JPanel infoBox = new JPanel() {
             @Override
             protected void paintComponent(Graphics g) {
@@ -130,7 +127,7 @@ public class DetailTemplate extends JPanel {
         center.add(infoBox);
         center.add(Box.createVerticalStrut(14));
 
-        // Big donut chart area in a rounded card
+
         JPanel donutCard = new JPanel() {
             @Override
             protected void paintComponent(Graphics g) {
@@ -146,12 +143,12 @@ public class DetailTemplate extends JPanel {
         donutCard.setMaximumSize(new Dimension(380, 360));
         donutCard.setLayout(new BorderLayout());
 
-        // Donut chart creation
+
         DonutChart chart = new DonutChart(occupied, free);
         chart.setPreferredSize(new Dimension(320, 260));
         chart.setOpaque(false);
 
-        // legends / numbers below
+
         JPanel legend = new JPanel();
         legend.setBackground(new Color(250, 220, 200));
         legend.setOpaque(false);
@@ -182,7 +179,7 @@ public class DetailTemplate extends JPanel {
         center.add(donutCard);
         center.add(Box.createVerticalStrut(14));
 
-        // Bottom large navigation button (navigate to location)
+
         JPanel bottomBtnWrap = new JPanel();
         bottomBtnWrap.setOpaque(false);
         bottomBtnWrap.setLayout(new GridBagLayout());
@@ -200,20 +197,20 @@ public class DetailTemplate extends JPanel {
         center.add(bottomBtnWrap);
         center.add(Box.createVerticalStrut(14));
 
-        // Add center to main panel with scroll if needed
+
         JScrollPane sp = new JScrollPane(center, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         sp.setBorder(null);
         sp.getViewport().setOpaque(false);
         sp.setOpaque(false);
         add(sp, BorderLayout.CENTER);
 
-        // Back button overlay on top-left
+
         JButton backBtn = new JButton("←");
         backBtn.setFocusPainted(false);
         backBtn.setContentAreaFilled(false);
         backBtn.addActionListener(e -> manager.showScreen(ScreenManager.DASHBOARD));
         backBtn.setBorder(BorderFactory.createEmptyBorder(6, 8, 6, 8));
-        // place back button in NORTHWEST corner area
+
         JPanel backWrap = new JPanel(new FlowLayout(FlowLayout.LEFT));
         backWrap.setOpaque(false);
         backWrap.setBorder(BorderFactory.createEmptyBorder(6, 8, 0, 0));
@@ -230,7 +227,7 @@ public class DetailTemplate extends JPanel {
         return l;
     }
 
-    // --- DonutChart inner class draws a donut using Java2D ---
+
     public static class DonutChart extends JComponent {
         private final int occupied;
         private final int free;
@@ -257,22 +254,22 @@ public class DetailTemplate extends JPanel {
             int x = (w - size) / 2;
             int y = (h - size) / 2;
 
-            // draw occupied arc (red)
+            //red donut
             g2.setColor(new Color(220, 40, 50));
             g2.fillArc(x, y, size, size, 90, (int) -Math.round(occAngle));
 
-            // draw free arc (green) -- starts where occupied ended
+            //green donut
             g2.setColor(new Color(100, 200, 100));
             g2.fillArc(x, y, size, size, 90 - (int) Math.round(occAngle), (int) -Math.round(freeAngle));
 
-            // draw inner circle to make donut
+
             int inner = (int) (size * 0.5);
             int ix = x + (size - inner) / 2;
             int iy = y + (size - inner) / 2;
             g2.setColor(getParent() != null ? getParent().getBackground() : new Color(250, 220, 200));
             g2.fillOval(ix, iy, inner, inner);
 
-            // draw center percentage text
+
             double percent = 100.0 * occupied / total;
             String pct = String.format("%.0f%%", percent);
             g2.setColor(new Color(10, 35, 150));

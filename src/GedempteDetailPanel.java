@@ -1,5 +1,5 @@
 import javax.swing.*;
-import java.awt.*;        // <-- required
+import java.awt.*;
 
 public class GedempteDetailPanel extends JPanel {
     public GedempteDetailPanel(ScreenManager manager) {

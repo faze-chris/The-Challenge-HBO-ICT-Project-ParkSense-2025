@@ -1,5 +1,5 @@
 import javax.swing.*;
-import java.awt.*;        // <-- IMPORTANT: adds BorderLayout
+import java.awt.*;
 
 public class WaldorfDetailPanel extends JPanel {
     public WaldorfDetailPanel(ScreenManager manager) {

@@ -21,14 +21,14 @@ public class ScreenManager extends JFrame {
         cardLayout = new CardLayout();
         cards = new JPanel(cardLayout);
 
-        // Create panels
+
         LoginPanel loginPanel = new LoginPanel(this);
         DashboardPanel dashboardPanel = new DashboardPanel(this);
         WaldorfDetailPanel waldorfPanel = new WaldorfDetailPanel(this);
         KoningDetailPanel koningPanel = new KoningDetailPanel(this);
         GedempteDetailPanel gedemptePanel = new GedempteDetailPanel(this);
 
-        // Add to card layout
+
         cards.add(loginPanel, LOGIN);
         cards.add(dashboardPanel, DASHBOARD);
         cards.add(waldorfPanel, WALDORF);
