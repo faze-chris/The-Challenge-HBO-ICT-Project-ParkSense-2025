@@ -3,13 +3,17 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
+import javax.imageio.ImageIO;
+import java.net.URL;
 
 
-public class DashboardPanel extends JPanel {
+
+
+public class Dashboard extends JPanel {
 
     private ScreenManager manager;
 
-    public DashboardPanel(ScreenManager manager) {
+    public Dashboard(ScreenManager manager) {
         this.manager = manager;
         setLayout(new BorderLayout());
         setBackground(Color.WHITE);
@@ -73,11 +77,11 @@ public class DashboardPanel extends JPanel {
         cards.setBorder(BorderFactory.createEmptyBorder(8, 18, 8, 18));
 
         cards.add(Box.createVerticalStrut(8));
-        cards.add(createLocationCard("Waldorfstraat", "waldorf.jpg", ScreenManager.WALDORF));
+        cards.add(createLocationCard("Waldorfstraat", "/images/gedempte.jpg", ScreenManager.WALDORF));
         cards.add(Box.createVerticalStrut(12));
-        cards.add(createLocationCard("Koningstraat", "koning.jpg", ScreenManager.KONING));
+        cards.add(createLocationCard("Koningstraat", "/images/koning.jpg", ScreenManager.KONING));
         cards.add(Box.createVerticalStrut(12));
-        cards.add(createLocationCard("Gedempte gracht", "gedempte.jpg", ScreenManager.GEDEMPTE));
+        cards.add(createLocationCard("Gedempte gracht", "/images/gedempte.jpg", ScreenManager.GEDEMPTE));
         cards.add(Box.createVerticalStrut(12));
 
 
@@ -110,30 +114,69 @@ public class DashboardPanel extends JPanel {
 
         add(bottomNav, BorderLayout.SOUTH);
     }
+    private static BufferedImage highQualityScale(BufferedImage src, int targetW, int targetH) {
+        int w = src.getWidth();
+        int h = src.getHeight();
 
+        BufferedImage img = src;
+
+        // Downscale in multiple half-steps for better quality
+        do {
+            if (w > targetW) {
+                w = Math.max(w / 2, targetW);
+            }
+            if (h > targetH) {
+                h = Math.max(h / 2, targetH);
+            }
+
+            BufferedImage tmp = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
+            Graphics2D g2 = tmp.createGraphics();
+            g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BICUBIC);
+            g2.drawImage(img, 0, 0, w, h, null);
+            g2.dispose();
+            img = tmp;
+
+        } while (w != targetW || h != targetH);
+
+        return img;
+    }
 
     private JPanel createLocationCard(String titleText, String imagePath, String destination) {
         JPanel wrapper = new JPanel();
+        Dimension d = new Dimension(380, 140);
         wrapper.setOpaque(false);
         wrapper.setLayout(new BorderLayout());
-        wrapper.setMaximumSize(new Dimension(380, 140));
-        wrapper.setPreferredSize(new Dimension(380, 140));
+        wrapper.setMinimumSize(d);
+        wrapper.setMaximumSize(d);
+        wrapper.setPreferredSize(d);
 
 
-        ImageIcon icon = new ImageIcon(imagePath);
-        Image img;
-        if (icon.getIconWidth() > 0) {
-            img = icon.getImage().getScaledInstance(380, 140, Image.SCALE_SMOOTH);
-        } else {
+        ImageIcon icon = new ImageIcon(Dashboard.class.getResource(imagePath));
 
-            BufferedImagePlaceholder placeholder = new BufferedImagePlaceholder(380,140);
-            img = placeholder.getImage();
-        }
+        JLabel imageLabel = new JLabel() {
 
-        JLabel imageLabel = new JLabel(new ImageIcon(img)) {
+            private Image img;   // <-- FIELD inside the label
+
+            {
+
+                try {
+                    URL url = Dashboard.class.getResource(imagePath);
+                    BufferedImage original = ImageIO.read(url);
+
+                    img = highQualityScale(original, 380, 140);
+
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+
+                    BufferedImagePlaceholder placeholder = new BufferedImagePlaceholder(380, 140);
+                    img = placeholder.getImage();
+                }
+
+            }
+
             @Override
             protected void paintComponent(Graphics g) {
-
+                super.paintComponent(g);
                 Graphics2D g2 = (Graphics2D) g.create();
                 g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
                 Shape clip = new java.awt.geom.RoundRectangle2D.Float(0, 0, getWidth(), getHeight(), 28, 28);
@@ -143,6 +186,9 @@ public class DashboardPanel extends JPanel {
             }
         };
         imageLabel.setLayout(new BorderLayout());
+        imageLabel.setPreferredSize(d);
+        imageLabel.setMinimumSize(d);
+        imageLabel.setMaximumSize(d);
 
         JLabel label = new JLabel(titleText);
         label.setForeground(Color.WHITE);

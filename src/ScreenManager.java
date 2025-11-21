@@ -3,6 +3,7 @@ import java.awt.*;
 
 public class ScreenManager extends JFrame {
 
+    //kennis van de andere schermen
     public static final String LOGIN = "login";
     public static final String DASHBOARD = "dashboard";
     public static final String WALDORF = "waldorf";
@@ -23,18 +24,19 @@ public class ScreenManager extends JFrame {
 
         // Create panels
         LoginPanel loginPanel = new LoginPanel(this);
-        DashboardPanel dashboardPanel = new DashboardPanel(this);
+        Dashboard dashboard = new Dashboard(this);
         WaldorfDetailPanel waldorfPanel = new WaldorfDetailPanel(this);
         KoningDetailPanel koningPanel = new KoningDetailPanel(this);
         GedempteDetailPanel gedemptePanel = new GedempteDetailPanel(this);
 
         // Add to card layout
         cards.add(loginPanel, LOGIN);
-        cards.add(dashboardPanel, DASHBOARD);
+        cards.add(dashboard, DASHBOARD);
         cards.add(waldorfPanel, WALDORF);
         cards.add(koningPanel, KONING);
         cards.add(gedemptePanel, GEDEMPTE);
 
+        //start op login scherm
         add(cards);
         showScreen(LOGIN);
     }
