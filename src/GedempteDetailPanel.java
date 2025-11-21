@@ -4,6 +4,7 @@ import java.awt.*;
 public class GedempteDetailPanel extends JPanel {
     public GedempteDetailPanel(ScreenManager manager) {
         setLayout(new BorderLayout());
-        add(new DetailTemplate(manager, "gedempte gracht", 8, 6), BorderLayout.CENTER);
+        DarkDetailTemplate template = new DarkDetailTemplate(manager, "gedempte gracht", 8, 5);
+        add(template, BorderLayout.CENTER);
     }
 }

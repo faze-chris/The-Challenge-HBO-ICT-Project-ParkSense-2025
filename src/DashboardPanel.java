@@ -119,7 +119,7 @@ public class DashboardPanel extends JPanel {
         wrapper.setMaximumSize(new Dimension(380, 140));
         wrapper.setPreferredSize(new Dimension(380, 140));
 
-        // load image (fallback to gray if not found)
+
         ImageIcon icon = new ImageIcon(imagePath);
         Image img;
         if (icon.getIconWidth() > 0) {
