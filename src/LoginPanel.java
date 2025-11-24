@@ -18,7 +18,7 @@ public class LoginPanel extends JPanel {
 
         // Hard-coded users
         users.add(new User("admin@gmail.com", "admin123", "ADMIN"));
-        users.add(new User("user@example.com", "user123", "USER"));
+        users.add(new User("user@gmail.com", "user123", "USER"));
 
         JPanel content = new JPanel();
         content.setBackground(Color.WHITE);
