@@ -82,12 +82,9 @@ public class Dashboard extends JPanel {
         roundedSearch.add(searchField, BorderLayout.CENTER);
         roundedSearch.add(new JLabel("🎤"), BorderLayout.EAST);
         searchWrap.add(roundedSearch);
-
-        // --- CARDS SECTION (RESPONSIVE) ---
         JPanel cards = new JPanel();
         cards.setLayout(new BoxLayout(cards, BoxLayout.Y_AXIS));
         cards.setOpaque(false);
-        // The Border here acts as the "Margin" from the edge of the screen
         cards.setBorder(BorderFactory.createEmptyBorder(8, 20, 8, 20));
         cards.setAlignmentX(Component.CENTER_ALIGNMENT);
 
@@ -98,7 +95,6 @@ public class Dashboard extends JPanel {
         cards.add(Box.createVerticalStrut(12));
         cards.add(createLocationCard("Gedempte gracht", "/images/gedempte.jpg", ScreenManager.GEDEMPTE));
         cards.add(Box.createVerticalStrut(12));
-
         JPanel center = new JPanel();
         center.setLayout(new BoxLayout(center, BoxLayout.Y_AXIS));
         center.setOpaque(false);
@@ -130,8 +126,7 @@ public class Dashboard extends JPanel {
     private JPanel createLocationCard(String titleText, String imagePath, String destination) {
         JPanel wrapper = new JPanel();
         wrapper.setMaximumSize(new Dimension(Integer.MAX_VALUE, 140));
-        wrapper.setPreferredSize(new Dimension(0, 140)); // 0 width lets layout manager decide actual width
-
+        wrapper.setPreferredSize(new Dimension(0, 140));
         wrapper.setOpaque(false);
         wrapper.setLayout(new BorderLayout());
         wrapper.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -152,6 +147,7 @@ public class Dashboard extends JPanel {
 
             @Override
             protected void paintComponent(Graphics g) {
+                // Do not call super.paintComponent(g) to allow custom clipping
                 Graphics2D g2 = (Graphics2D) g.create();
                 g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
                 g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BICUBIC);
@@ -199,6 +195,7 @@ public class Dashboard extends JPanel {
         p.setOpaque(false);
         p.setLayout(new BoxLayout(p, BoxLayout.Y_AXIS));
         p.setBorder(BorderFactory.createEmptyBorder(6, 6, 6, 6));
+
         JButton btn = new JButton(text);
         btn.setAlignmentX(Component.CENTER_ALIGNMENT);
         btn.setFocusPainted(false);
