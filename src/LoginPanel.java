@@ -1,5 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class LoginPanel extends JPanel {
 
@@ -7,14 +9,16 @@ public class LoginPanel extends JPanel {
     private RoundedTextField emailField;
     private RoundedPasswordField passwordField;
 
-
-    private final String CORRECT_EMAIL = "admin@example.com";
-    private final String CORRECT_PASSWORD = "12345";
+    private List<User> users = new ArrayList<>();
 
     public LoginPanel(ScreenManager manager) {
         this.manager = manager;
         setLayout(new BorderLayout());
         setBackground(Color.WHITE);
+
+        // Hard-coded users
+        users.add(new User("admin@gmail.com", "admin123", "ADMIN"));
+        users.add(new User("user@example.com", "user123", "USER"));
 
         JPanel content = new JPanel();
         content.setBackground(Color.WHITE);
@@ -24,7 +28,6 @@ public class LoginPanel extends JPanel {
         JLabel title = new JLabel("parksence");
         title.setFont(new Font("Arial", Font.BOLD, 36));
         title.setAlignmentX(Component.CENTER_ALIGNMENT);
-
 
         ImageIcon icon = new ImageIcon("logo.png");
         JLabel imgLabel;
@@ -70,7 +73,6 @@ public class LoginPanel extends JPanel {
         loginBtn.setForeground(Color.WHITE);
         loginBtn.setFocusPainted(false);
 
-
         JPanel signupPanel = new JPanel();
         signupPanel.setBackground(Color.BLACK);
         signupPanel.setMaximumSize(new Dimension(160, 60));
@@ -105,24 +107,38 @@ public class LoginPanel extends JPanel {
 
         add(content, BorderLayout.CENTER);
 
-
         JLabel help = new JLabel(" ");
         help.setHorizontalAlignment(SwingConstants.CENTER);
-        help.setBorder(BorderFactory.createEmptyBorder(8,0,8,0));
+        help.setBorder(BorderFactory.createEmptyBorder(8, 0, 8, 0));
         add(help, BorderLayout.SOUTH);
-
+        SwingUtilities.invokeLater(() -> {
+            JRootPane root = SwingUtilities.getRootPane(loginBtn);
+            if (root != null) {
+                root.setDefaultButton(loginBtn);
+            }
+        });
 
         loginBtn.addActionListener(e -> {
             String email = emailField.getText().trim();
             String pass = new String(passwordField.getPassword());
 
-            if (email.equals(CORRECT_EMAIL) && pass.equals(CORRECT_PASSWORD)) {
+            User loggedInUser = authenticate(email, pass);
 
-                manager.showScreen(ScreenManager.DASHBOARD);
+            if (loggedInUser != null) {
+                manager.showDashboard(loggedInUser);
             } else {
                 JOptionPane.showMessageDialog(this, "Incorrect email or password",
                         "Login failed", JOptionPane.ERROR_MESSAGE);
             }
         });
+    }
+
+    private User authenticate(String email, String password) {
+        for (User u : users) {
+            if (u.getEmail().equals(email) && u.getPassword().equals(password)) {
+                return u;
+            }
+        }
+        return null;
     }
 }
