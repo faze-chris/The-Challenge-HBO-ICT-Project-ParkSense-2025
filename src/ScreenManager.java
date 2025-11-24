@@ -2,13 +2,11 @@ import javax.swing.*;
 import java.awt.*;
 
 public class ScreenManager extends JFrame {
-
-    //kennis van de andere schermen
+    public static final String WALDORF = "WALDORF";
+    public static final String KONING = "KONING";
+    public static final String GEDEMPTE = "GEDEMPTE";
     public static final String LOGIN = "login";
     public static final String DASHBOARD = "dashboard";
-    public static final String WALDORF = "waldorf";
-    public static final String KONING = "koning";
-    public static final String GEDEMPTE = "gedempte";
 
     private CardLayout cardLayout;
     private JPanel cards;
@@ -22,26 +20,33 @@ public class ScreenManager extends JFrame {
         cardLayout = new CardLayout();
         cards = new JPanel(cardLayout);
 
-        // Create panels
+        // Create screens once
         LoginPanel loginPanel = new LoginPanel(this);
-        Dashboard dashboard = new Dashboard(this);
-        WaldorfDetailPanel waldorfPanel = new WaldorfDetailPanel(this);
-        KoningDetailPanel koningPanel = new KoningDetailPanel(this);
-        GedempteDetailPanel gedemptePanel = new GedempteDetailPanel(this);
+        WaldorfDetailPanel waldorf = new WaldorfDetailPanel(this);
+        KoningDetailPanel koning = new KoningDetailPanel(this);
+        GedempteDetailPanel gedempte = new GedempteDetailPanel(this);
 
-        // Add to card layout
         cards.add(loginPanel, LOGIN);
-        cards.add(dashboard, DASHBOARD);
-        cards.add(waldorfPanel, WALDORF);
-        cards.add(koningPanel, KONING);
-        cards.add(gedemptePanel, GEDEMPTE);
+        cards.add(waldorf, WALDORF);
+        cards.add(koning, KONING);
+        cards.add(gedempte, GEDEMPTE);
 
-        //start op login scherm
         add(cards);
         showScreen(LOGIN);
     }
 
     public void showScreen(String name) {
         cardLayout.show(cards, name);
+    }
+
+    public void showDashboard(User user) {
+        // Remove previous dashboard if it exists
+        cards.remove(cards.getComponentCount() - 1);
+
+        // Create new dashboard with correct user
+        Dashboard dashboard = new Dashboard(this, user);
+        cards.add(dashboard, DASHBOARD);
+
+        showScreen(DASHBOARD);
     }
 }
