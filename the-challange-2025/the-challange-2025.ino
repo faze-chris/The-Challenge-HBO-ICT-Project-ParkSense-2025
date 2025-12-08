@@ -21,6 +21,21 @@
 
 TM1637Display display(CLK, DIO);
 
+// added: FULL in hex code
+const uint8_t SEG_FULL[] = {
+  0x71,  // F
+  0x3E,  // U
+  0x38,  // L
+  0x38   // L
+};
+// dutch version 
+// const uint8_t SEG_FULL[] = {
+//   0x3E,  // v = doesnt work but this is a u
+//   0x3F,  // o
+//   0x38,  // l
+// };
+
+
 void setup() {
   Serial.begin(9600);
   display.setBrightness(7);
@@ -78,7 +93,7 @@ void loop() {
   }
 
   // start with 2 parking spots available
-  int totalSpots = 2;  
+  int totalSpots = 2;
 
   // check group 1: Only count if BOTH sensors in Group 1 are active/dectecting input
   if (ifPressurePressed == true && ifReflectionDetected == true) {
@@ -90,8 +105,12 @@ void loop() {
     totalSpots = totalSpots - 1;
   }
 
-  // if both are active/dectecting input
-  display.showNumberDec(totalSpots);
+  // if all spots are filled
+  if (totalSpots == 0) {
+    display.setSegments(SEG_FULL);
+  } else {
+    display.showNumberDec(totalSpots);
+  }
 
   delay(100);  // delay to stop flickring
 }
