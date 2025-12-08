@@ -1,7 +1,7 @@
 // clock display
 #include <TM1637Display.h>
 
-// PINS
+// PINS clock
 #define CLK 3
 #define DIO 2
 
