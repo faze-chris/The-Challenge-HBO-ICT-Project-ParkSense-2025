@@ -13,7 +13,7 @@
 #define PRESSURE_PIN_2 A2    // 2 pressure Sensor
 #define REFLECTION_PIN_2 A3  // 2 reflection sensor
 
-// LED PINS
+// LED PINS in groups
 #define G1_RED 12
 #define G1_GREEN 13
 #define G2_RED 11
@@ -29,7 +29,7 @@ void setup() {
   pinMode(REFLECTION_PIN, INPUT);
   pinMode(REFLECTION_PIN_2, INPUT);
 
-  // Set LED pins as output
+  // set LED pins as output
   pinMode(G1_RED, OUTPUT);
   pinMode(G1_GREEN, OUTPUT);
   pinMode(G2_RED, OUTPUT);
@@ -42,22 +42,22 @@ void setup() {
 void loop() {
 
   // read pressure Sensor
-  // if value is > 200, then reed pressed / car is on parking spot
   int pressureValue = analogRead(PRESSURE_PIN);
+  // if value is > 200, then reed pressed / car is on parking spot
   bool ifPressurePressed = (pressureValue > 200);
 
   // read reflection sensor
-  // The refelction sensor sends a LOW signal (0) when it when the car breaks the laser
   int reflectionValue = digitalRead(REFLECTION_PIN);
+  // the refelction sensor sends a LOW signal (0) when it when the car breaks the laser
   bool ifReflectionDetected = (reflectionValue == LOW);
 
   // LED Logic for Group 1
   if (ifPressurePressed == true && ifReflectionDetected == true) {
-    // Both active -> RED ON
+    //if both active: RED ON
     digitalWrite(G1_RED, HIGH);
     digitalWrite(G1_GREEN, LOW);
   } else {
-    // Empty -> GREEN ON
+    // if empty: GREEN ON
     digitalWrite(G1_RED, LOW);
     digitalWrite(G1_GREEN, HIGH);
   }
@@ -69,32 +69,29 @@ void loop() {
   int reflectionValue2 = digitalRead(REFLECTION_PIN_2);
   bool ifReflectionDetected2 = (reflectionValue2 == LOW);
 
-  // LED Logic for Group 2
   if (ifPressurePressed2 == true && ifReflectionDetected2 == true) {
-    // Both active -> RED ON
     digitalWrite(G2_RED, HIGH);
     digitalWrite(G2_GREEN, LOW);
   } else {
-    // Empty -> GREEN ON
     digitalWrite(G2_RED, LOW);
     digitalWrite(G2_GREEN, HIGH);
   }
 
+  // start with 2 parking spots available
+  int totalSpots = 2;  
 
-  int totalSpots = 2;  // Start with 2 parking spots available
-
-  // Check Group 1: Only count if BOTH sensors in Group 1 are active
+  // check group 1: Only count if BOTH sensors in Group 1 are active/dectecting input
   if (ifPressurePressed == true && ifReflectionDetected == true) {
     totalSpots = totalSpots - 1;
   }
 
-  // Check Group 2: Only count if BOTH sensors in Group 2 are active
+  // check group 2: Only count if BOTH sensors in Group 2 are active/dectecting input
   if (ifPressurePressed2 == true && ifReflectionDetected2 == true) {
     totalSpots = totalSpots - 1;
   }
 
-  // If BOTH are active
+  // if both are active/dectecting input
   display.showNumberDec(totalSpots);
 
-  delay(100);  // delay to stop flic
+  delay(100);  // delay to stop flickring
 }
