@@ -109,14 +109,18 @@ public class Dashboard extends JPanel {
         scroll.getViewport().setOpaque(false);
 
         add(scroll, BorderLayout.CENTER);
-        JPanel bottomNav = new JPanel(new GridLayout(1, 3));
+        // CHANGE 1: Increase grid columns from 3 to 4
+        JPanel bottomNav = new JPanel(new GridLayout(1, 4));
         bottomNav.setPreferredSize(new Dimension(400, 70));
         bottomNav.setBorder(BorderFactory.createMatteBorder(1, 0, 0, 0, new Color(220, 220, 220)));
         bottomNav.setBackground(Color.WHITE);
 
         bottomNav.add(makeBottomButton("Home", true, e -> manager.showScreen(ScreenManager.LOGIN)));
         bottomNav.add(makeBottomButton("Zoeken", false, e -> manager.showScreen(ScreenManager.DASHBOARD)));
-        bottomNav.add(makeBottomButton("Instellingen", false, e -> {
+        bottomNav.add(makeBottomButton("Code", false, e -> {
+            manager.showScreen(ScreenManager.CODE_VIEW);
+        }));
+        bottomNav.add(makeBottomButton("Instell.", false, e -> {
             JOptionPane.showMessageDialog(this, "Settings not implemented yet.");
         }));
 

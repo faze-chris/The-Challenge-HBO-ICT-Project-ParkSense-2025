@@ -7,6 +7,7 @@ public class ScreenManager extends JFrame {
     public static final String GEDEMPTE = "GEDEMPTE";
     public static final String LOGIN = "login";
     public static final String DASHBOARD = "dashboard";
+    public static final String CODE_VIEW = "CODE_VIEW";
 
     private CardLayout cardLayout;
     private JPanel cards;
@@ -19,17 +20,16 @@ public class ScreenManager extends JFrame {
 
         cardLayout = new CardLayout();
         cards = new JPanel(cardLayout);
-
-        // Create screens once
         LoginPanel loginPanel = new LoginPanel(this);
         WaldorfDetailPanel waldorf = new WaldorfDetailPanel(this);
         KoningDetailPanel koning = new KoningDetailPanel(this);
         GedempteDetailPanel gedempte = new GedempteDetailPanel(this);
-
+        CodeViewPanel codePanel = new CodeViewPanel();
         cards.add(loginPanel, LOGIN);
         cards.add(waldorf, WALDORF);
         cards.add(koning, KONING);
         cards.add(gedempte, GEDEMPTE);
+        cards.add(codePanel, CODE_VIEW);
 
         add(cards);
         showScreen(LOGIN);
@@ -40,10 +40,9 @@ public class ScreenManager extends JFrame {
     }
 
     public void showDashboard(User user) {
-        // Remove previous dashboard if it exists
-        cards.remove(cards.getComponentCount() - 1);
-
-        // Create new dashboard with correct user
+        try {
+        } catch (Exception e) {
+        }
         Dashboard dashboard = new Dashboard(this, user);
         cards.add(dashboard, DASHBOARD);
 
