@@ -6,11 +6,11 @@
 #define DIO 2
 
 // GROUP 1 PINS
-#define PRESSURE_PIN A0    // pressure Sensor
+#define PRESSURE_PIN A0    // pressure sensor
 #define REFLECTION_PIN A1  // reflection sensor
 
 // GROUP 2 PINS
-#define PRESSURE_PIN_2 A2    // 2 pressure Sensor
+#define PRESSURE_PIN_2 A2    // 2 pressure sensor
 #define REFLECTION_PIN_2 A3  // 2 reflection sensor
 
 // LED PINS in groups
