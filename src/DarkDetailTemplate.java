@@ -2,13 +2,20 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.Random;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 
 public class DarkDetailTemplate extends JPanel {
+    private static final String DB_URL ="jdbc:mysql://localhost:3306/challenge_2025?serverTimezone=UTC";
+    private static final String DB_USER = "root";      // change if needed
+    private static final String DB_PASS = "";          // change if needed
 
     private final ScreenManager manager;
     private final String streetName;
-
 
     private DonutChart donut;
     private JLabel centerNumberLabel;
@@ -25,24 +32,21 @@ public class DarkDetailTemplate extends JPanel {
         setLayout(new BorderLayout());
         setBackground(new Color(12, 18, 22));
 
-
         JPanel topSpacer = new JPanel();
         topSpacer.setOpaque(false);
         topSpacer.setPreferredSize(new Dimension(10, 6));
         add(topSpacer, BorderLayout.NORTH);
-
 
         JPanel main = new JPanel();
         main.setOpaque(false);
         main.setLayout(new BoxLayout(main, BoxLayout.Y_AXIS));
         main.setBorder(BorderFactory.createEmptyBorder(18, 16, 16, 16));
 
-
+        // PROFILE CARD
         JPanel profileCard = createRoundedPanel(new Color(34, 43, 51), 18);
         profileCard.setLayout(new BorderLayout(8, 8));
         profileCard.setMaximumSize(new Dimension(380, 84));
         profileCard.setPreferredSize(new Dimension(380, 84));
-
 
         JPanel leftProfile = new JPanel();
         leftProfile.setOpaque(false);
@@ -58,7 +62,6 @@ public class DarkDetailTemplate extends JPanel {
         leftProfile.add(phone);
         leftProfile.add(Box.createVerticalGlue());
 
-
         JButton profileBtn = new JButton("\uD83D\uDC64");
         profileBtn.setFocusPainted(false);
         profileBtn.setContentAreaFilled(false);
@@ -70,7 +73,6 @@ public class DarkDetailTemplate extends JPanel {
         profileCard.add(leftProfile, BorderLayout.WEST);
         profileCard.add(profileBtn, BorderLayout.EAST);
 
-
         JLabel streetTitle = new JLabel(streetName);
         streetTitle.setForeground(new Color(120, 255, 170));
         streetTitle.setFont(streetTitle.getFont().deriveFont(Font.BOLD, 22f));
@@ -81,7 +83,7 @@ public class DarkDetailTemplate extends JPanel {
         main.add(streetTitle);
         main.add(Box.createVerticalStrut(12));
 
-
+        // NOTIFICATIONS
         JPanel notifBox = createRoundedPanel(new Color(28, 40, 35), 14);
         notifBox.setMaximumSize(new Dimension(380, 68));
         notifBox.setPreferredSize(new Dimension(380, 68));
@@ -94,7 +96,7 @@ public class DarkDetailTemplate extends JPanel {
         main.add(notifBox);
         main.add(Box.createVerticalStrut(12));
 
-
+        // ICON ROW
         JPanel iconsRow = new JPanel(new FlowLayout(FlowLayout.CENTER, 18, 6));
         iconsRow.setOpaque(false);
         iconsRow.setMaximumSize(new Dimension(380, 48));
@@ -108,13 +110,12 @@ public class DarkDetailTemplate extends JPanel {
         main.add(iconsRow);
         main.add(Box.createVerticalStrut(8));
 
-
+        // DONUT CARD
         JPanel donutCard = createRoundedPanel(new Color(36, 50, 46), 28);
         donutCard.setLayout(new BoxLayout(donutCard, BoxLayout.Y_AXIS));
         donutCard.setMaximumSize(new Dimension(380, 380));
         donutCard.setPreferredSize(new Dimension(380, 360));
         donutCard.setBorder(BorderFactory.createEmptyBorder(16, 16, 16, 16));
-
 
         JLabel meldLabel = new JLabel("meldingen", SwingConstants.CENTER);
         meldLabel.setForeground(new Color(150, 255, 200));
@@ -131,13 +132,11 @@ public class DarkDetailTemplate extends JPanel {
         donutCard.add(subtitleLabel);
         donutCard.add(Box.createVerticalStrut(8));
 
-
         donut = new DonutChart(initialOccupied, initialFree);
         donut.setAlignmentX(Component.CENTER_ALIGNMENT);
         donutCard.add(donut);
 
         donutCard.add(Box.createVerticalStrut(12));
-
 
         JPanel counts = new JPanel(new GridLayout(1, 2, 6, 6));
         counts.setOpaque(false);
@@ -154,7 +153,7 @@ public class DarkDetailTemplate extends JPanel {
         main.add(donutCard);
         main.add(Box.createVerticalStrut(12));
 
-
+        // NAVIGATION BUTTON
         JButton navigateBtn = new JButton("navigeer naar locatie   \uD83D\uDCF1");
         navigateBtn.setMaximumSize(new Dimension(360, 64));
         navigateBtn.setPreferredSize(new Dimension(360, 64));
@@ -167,13 +166,14 @@ public class DarkDetailTemplate extends JPanel {
         main.add(navigateBtn);
         main.add(Box.createVerticalStrut(18));
 
-
+        // BOTTOM ROW
         JPanel bottomRow = new JPanel();
         bottomRow.setOpaque(false);
         bottomRow.setLayout(new BoxLayout(bottomRow, BoxLayout.Y_AXIS));
-        bottomRow.setMaximumSize(new Dimension(380, 120));
+        bottomRow.setMaximumSize(new Dimension(380, 160)); // increased height
 
-        JButton reloadBtn = new JButton("↺"); // reload icon
+        // Reload button
+        JButton reloadBtn = new JButton("↺");
         reloadBtn.setPreferredSize(new Dimension(60, 60));
         reloadBtn.setMaximumSize(new Dimension(60, 60));
         reloadBtn.setBackground(new Color(24, 160, 90));
@@ -181,17 +181,29 @@ public class DarkDetailTemplate extends JPanel {
         reloadBtn.setFocusPainted(false);
         reloadBtn.setFont(reloadBtn.getFont().deriveFont(Font.BOLD, 20f));
         reloadBtn.setAlignmentX(Component.CENTER_ALIGNMENT);
-
-
         reloadBtn.addActionListener(e -> refresh());
 
         bottomRow.add(Box.createVerticalStrut(6));
         bottomRow.add(reloadBtn);
+        bottomRow.add(Box.createVerticalStrut(12));
+
+        // NEW: Database button under reload
+        JButton databaseBtn = new JButton("View Database Table");
+        databaseBtn.setMaximumSize(new Dimension(200, 48));
+        databaseBtn.setPreferredSize(new Dimension(200, 48));
+        databaseBtn.setBackground(new Color(28, 90, 160));
+        databaseBtn.setForeground(Color.WHITE);
+        databaseBtn.setFocusPainted(false);
+        databaseBtn.setFont(databaseBtn.getFont().deriveFont(Font.BOLD, 14f));
+        databaseBtn.setAlignmentX(Component.CENTER_ALIGNMENT);
+        databaseBtn.addActionListener(e -> manager.showScreen(ScreenManager.HISTORY));
+
+        bottomRow.add(databaseBtn);
         bottomRow.add(Box.createVerticalStrut(6));
 
         main.add(bottomRow);
 
-
+        // BOTTOM NAVIGATION ROW
         JPanel navRow = new JPanel(new BorderLayout());
         navRow.setOpaque(false);
         navRow.setMaximumSize(new Dimension(380, 40));
@@ -217,13 +229,10 @@ public class DarkDetailTemplate extends JPanel {
         main.add(Box.createVerticalStrut(6));
         main.add(navRow);
 
-
         add(main, BorderLayout.CENTER);
-
 
         refresh();
     }
-
 
     private JPanel createRoundedPanel(Color bg, int arc) {
         JPanel p = new JPanel() {
@@ -251,33 +260,38 @@ public class DarkDetailTemplate extends JPanel {
         return b;
     }
 
-
     public void refresh() {
-        int total = 8 + rnd.nextInt(7); // 8..14
-        int occupied = 3 + rnd.nextInt(Math.max(1, total - 2)); // somewhat random
-        int free = Math.max(0, total - occupied);
+        int occupied = 0;
+        int free = 0;
 
-        donut.setValues(occupied, free);
-        donut.repaint();
+        String sql =
+                "SELECT totalSpots " +
+                        "FROM parking_history " +
+                        "ORDER BY created_at DESC " +
+                        "LIMIT 1";
 
+        try (Connection con = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
+             PreparedStatement ps = con.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
 
-        occupiedLabel.setText("bezet  " + occupied);
-        freeLabel.setText("leeg  " + free);
+            if (rs.next()) {
+                occupied = 2-rs.getInt("totalspots");
+                free = rs.getInt("totalspots");
+            }
+            donut.setValues(occupied, free);
+            donut.repaint();
 
+            occupiedLabel.setText("bezet  " + occupied);
+            freeLabel.setText("leeg  " + free);
 
+            notificationLabel.setText("live data loaded from database");
+            subtitleLabel.setText("laatste update uit database");
 
+        } catch (SQLException ex) {
+            ex.printStackTrace();
 
-        int choice = rnd.nextInt(3);
-        if (choice == 0) {
-            int spot = 1 + rnd.nextInt(9); // below 10
-            notificationLabel.setText("spot " + spot + " has been full for an extended period of time");
-            subtitleLabel.setText("vak 3a is al " + (10 + rnd.nextInt(48)) + " uur leegstaand");
-        } else if (choice == 1) {
-            notificationLabel.setText("street data not updating, contact support.");
-            subtitleLabel.setText("vak 3a is al " + (2 + rnd.nextInt(6)) + " uur leegstaand");
-        } else {
-            notificationLabel.setText("no notifications");
-            subtitleLabel.setText("vak 3a is al " + (1 + rnd.nextInt(12)) + " uur leegstaand");
+            notificationLabel.setText("database connection error");
+            subtitleLabel.setText("controleer MySQL verbinding");
         }
     }
 
@@ -313,12 +327,10 @@ public class DarkDetailTemplate extends JPanel {
             int x = (w - size) / 2;
             int y = (h - size) / 2;
 
-
             g2.setColor(new Color(40, 60, 50));
             Stroke old = g2.getStroke();
             g2.setStroke(new BasicStroke(size * 0.14f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
             g2.drawArc(x + (int)(size*0.07), y + (int)(size*0.07), (int)(size*0.86), (int)(size*0.86), 0, 360);
-
 
             g2.setColor(new Color(220, 40, 50));
             g2.setStroke(new BasicStroke(size * 0.14f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
@@ -326,14 +338,12 @@ public class DarkDetailTemplate extends JPanel {
             int occ = -(int)Math.round(occAngle);
             g2.drawArc(x + (int)(size*0.07), y + (int)(size*0.07), (int)(size*0.86), (int)(size*0.86), start, occ);
 
-
             g2.setColor(new Color(100, 200, 120));
             int freeStart = start + occ;
             int freeArc = -(int)Math.round(freeAngle);
             g2.drawArc(x + (int)(size*0.07), y + (int)(size*0.07), (int)(size*0.86), (int)(size*0.86), freeStart, freeArc);
 
-
-            double percent = 100.0 * occupied / total;
+            double percent = 100.0 * free / total;
             String pct = String.format("%.0f%%", percent);
             g2.setFont(getFont().deriveFont(Font.BOLD, 20f));
             FontMetrics fm = g2.getFontMetrics();
