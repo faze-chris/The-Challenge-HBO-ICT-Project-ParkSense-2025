@@ -55,13 +55,17 @@ void setup() {
 }
 
 void loop() {
-
+  // read pressure Sensor
+  // if value is > 200, then reed pressed / car is on parking spot
   int pressureValue = analogRead(PRESSURE_PIN);
   bool ifPressurePressed = (pressureValue > 200);
-
+ 
+  // if value is > 200, then reed pressed / car is on parking spot
   int reflectionValue = digitalRead(REFLECTION_PIN);
   bool ifReflectionDetected = (reflectionValue == LOW);
 
+  // read reflection sensor
+  // The refelction sensor sends a LOW signal (0) when it when the car breaks the laser
   if (ifPressurePressed == true && ifReflectionDetected == true) {
     digitalWrite(G1_RED, HIGH);
     digitalWrite(G1_GREEN, LOW);
@@ -72,11 +76,12 @@ void loop() {
       Serial.println("SENSOR_1:OCCUPIED"); 
       wasOccupied1 = true;                 
     }
-
+  //if both active: RED ON
   } else {
     digitalWrite(G1_RED, LOW);
     digitalWrite(G1_GREEN, HIGH);
 
+// check past occupation
     if (wasOccupied1) {
       Serial.println("SENSOR_1:FREE");
       wasOccupied1 = false;
